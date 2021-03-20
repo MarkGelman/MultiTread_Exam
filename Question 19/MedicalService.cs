@@ -9,7 +9,7 @@ namespace Question_19
 {
     class MedicalService
     {
-       
+        string door = "open";
         private object keyDoctor = new object();
         //private object keyNurse = new object();
 
@@ -17,9 +17,12 @@ namespace Question_19
         {
             lock (keyDoctor)
             {
-                
-                Console.WriteLine("Waiting for my turn");
-                Monitor.Wait(keyDoctor);
+                while (door == "close")
+                {
+                    Console.WriteLine("Waiting for my turn");
+                    Monitor.Wait(keyDoctor);
+                }
+                door = "close";
             }
             Console.WriteLine("Getting treatment!");
             NurseCheck();
@@ -34,6 +37,7 @@ namespace Question_19
                     Thread.Sleep(5000);
                 }
                 Console.WriteLine("Next patient please");
+                door = "open";
                 Monitor.Pulse(keyDoctor);
         }
            
